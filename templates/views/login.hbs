@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title> Login </title>
+</head>
+
+<body> 
+    <div class="box">
+    {{>navbar}}
+    <div class="container">
+        <div class="title">Login</div>
+        <form>
+            <div class="user-details">
+                <div class="input-box">
+                    <span class="details">Username</span>
+                    <input type="text" name="email" placeholder="Email">
+                </div>
+                <div class="input-box">
+                    <span class="details">Password</span>
+                    <input type="text" placeholder="Enter your password" name="password">
+                </div>
+            </div>
+
+            <div class="button">
+                <input type="button" onclick="postData()" value="Login">
+            </div>
+        </form>
+    </div>
+    </div>
+    <script>
+        async function postData() {
+            try{
+              const email = document.querySelector('input[name="email"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+            
+            const data = JSON.stringify({
+                email: email,
+                password: password
+            });
+               const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: data,
+            });
+            console.log("posted")
+            const jsonData =await response.json();
+            console.log(jsonData)
+            if(response.status==400){
+                alert(jsonData.error)
+            }else if(response.status==301){
+                window.location.href="/home"
+            }
+            
+        } catch (e) {
+            alert(e.name);
+            console.error(e);
+        }
+    }
+    </script>
+</body>
+
+</html>
